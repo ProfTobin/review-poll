@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foundations in Business Law — Review Session Poll</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --dark: #1a1a2e;
+    --gold: #b8963e;
+    --gold-light: #d4af6a;
+    --red: #8b1a1a;
+    --border: #c8b99a;
+    --text: #2d2d2d;
+    --subtext: #5a5a5a;
+    --selected: #1a3a1a;
+    --selected-border: #2d5a2d;
+    --selected-bg: #e8f0e8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--cream);
+    font-family: 'Source Sans 3', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 0 60px 0;
+  }
+
+  /* Header */
+  .header {
+    background: var(--dark);
+    padding: 36px 24px 28px;
+    text-align: center;
+    border-bottom: 4px solid var(--gold);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 40px,
+      rgba(184,150,62,0.04) 40px,
+      rgba(184,150,62,0.04) 41px
+    );
+  }
+  .header-rule {
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin: 0 auto 14px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    color: #fff;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .header .subtitle {
+    color: var(--gold-light);
+    font-size: 0.95rem;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    position: relative;
+  }
+
+  /* Main container */
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* Intro card */
+  .intro {
+    background: white;
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--gold);
+    padding: 24px 28px;
+    margin: 32px 0 0;
+    font-size: 0.97rem;
+    line-height: 1.7;
+    color: var(--subtext);
+  }
+  .intro strong { color: var(--text); }
+
+  /* Form sections */
+  .form-section {
+    margin-top: 28px;
+  }
+  .section-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--dark);
+    margin-bottom: 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-sublabel {
+    font-size: 0.82rem;
+    color: var(--subtext);
+    margin-bottom: 16px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  /* Name field */
+  .name-field {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 1rem;
+    border: 1.5px solid var(--border);
+    background: white;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+    margin-top: 4px;
+  }
+  .name-field:focus { border-color: var(--gold); }
+
+  /* Day block */
+  .day-block {
+    background: white;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .day-header {
+    background: var(--dark);
+    color: white;
+    padding: 10px 18px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .day-date {
+    font-size: 0.78rem;
+    color: var(--gold-light);
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* Time slot grid */
+  .slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border-top: 1px solid var(--border);
+  }
+  .slot {
+    background: white;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s, color 0.15s;
+    position: relative;
+  }
+  .slot:hover {
+    background: #f0ede5;
+  }
+  .slot.selected {
+    background: var(--selected-bg);
+    color: var(--selected);
+  }
+  .slot-time {
+    font-size: 0.88rem;
+    font-weight: 600;
+    display: block;
+    line-height: 1.3;
+  }
+  .slot-end {
+    font-size: 0.75rem;
+    color: var(--subtext);
+    font-weight: 300;
+  }
+  .slot.selected .slot-end { color: var(--selected); opacity: 0.75; }
+  .slot-check {
+    display: block;
+    margin-top: 6px;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    margin: 6px auto 0;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .slot.selected .slot-check {
+    background: var(--selected);
+    border-color: var(--selected);
+  }
+  .slot.selected .slot-check::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 5px;
+    height: 9px;
+    border: 2px solid white;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
+  }
+
+  /* Select all row */
+  .select-all-row {
+    padding: 8px 18px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    color: var(--subtext);
+    background: #faf8f3;
+    transition: color 0.15s;
+  }
+  .select-all-row:hover { color: var(--gold); }
+  .select-all-toggle {
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    display: inline-block;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .select-all-toggle.all-selected {
+    background: var(--dark);
+    border-color: var(--dark);
+  }
+  .select-all-toggle.all-selected::after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 0px;
+    width: 4px;
+    height: 8px;
+    border: 1.5px solid white;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
+  }
+
+  /* None available option */
+  .none-row {
+    padding: 10px 18px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--subtext);
+    background: #faf8f3;
+    transition: color 0.15s;
+  }
+  .none-row:hover { color: var(--red); }
+  .none-row.none-selected { color: var(--red); font-weight: 600; }
+  .none-indicator {
+    width: 14px;
+    height: 14px;
+    border: 1px solid currentColor;
+    border-radius: 2px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .none-row.none-selected .none-indicator::after {
+    content: '×';
+    position: absolute;
+    left: 1px;
+    top: -3px;
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  /* Submit area */
+  .submit-area {
+    margin-top: 32px;
+    text-align: center;
+  }
+  .submit-btn {
+    background: var(--dark);
+    color: white;
+    border: none;
+    padding: 16px 48px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-bottom: 3px solid var(--gold);
+    transition: background 0.2s, transform 0.1s;
+  }
+  .submit-btn:hover { background: #2a2a4a; }
+  .submit-btn:active { transform: translateY(1px); }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Success state */
+  .success {
+    display: none;
+    background: white;
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--selected);
+    padding: 40px 28px;
+    text-align: center;
+    margin-top: 32px;
+  }
+  .success-icon {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+  }
+  .success h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--dark);
+    margin-bottom: 10px;
+  }
+  .success p {
+    color: var(--subtext);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  /* Error */
+  .error-msg {
+    color: var(--red);
+    font-size: 0.85rem;
+    margin-top: 8px;
+    display: none;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 48px;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--border);
+    letter-spacing: 0.05em;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .slots-grid { grid-template-columns: repeat(3, 1fr); }
+    .header { padding: 28px 16px 22px; }
+    .intro, .submit-area { padding-left: 0; padding-right: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-rule"></div>
+  <h1>Foundations in Business Law<br>Review Session — Availability Poll</h1>
+  <div class="subtitle">Spring 2026 &nbsp;·&nbsp; Professor Donald</div>
+</div>
+
+<div class="container">
+
+  <div class="intro">
+    Please indicate <strong>all time slots that work for you</strong> during the week of April 22–25. Select every block when you are free — even if it overlaps with something else you can move. Professor Donald will choose the time with the broadest availability and follow up with a confirmation.
+    <br><br>
+    <strong>Your responses are private</strong> and will not be visible to other students.
+  </div>
+
+  <form id="pollForm">
+
+    <!-- Name -->
+    <div class="form-section">
+      <div class="section-label">Your Name</div>
+      <input type="text" class="name-field" id="studentName" placeholder="First Last" autocomplete="name" required>
+      <div class="error-msg" id="nameError">Please enter your name before submitting.</div>
+    </div>
+
+    <!-- Availability -->
+    <div class="form-section" style="margin-top:32px;">
+      <div class="section-label">Your Availability</div>
+      <div class="section-sublabel">Click each block you are free — select as many as apply</div>
+
+      <!-- Wednesday -->
+      <div class="day-block">
+        <div class="day-header">
+          Wednesday
+          <span class="day-date">April 22</span>
+        </div>
+        <div class="slots-grid" id="day-wed"></div>
+        <div class="select-all-row" onclick="toggleSelectAll('wed')">
+          <span class="select-all-toggle" id="sa-wed"></span>
+          Select all Wednesday slots
+        </div>
+        <div class="none-row" id="none-wed" onclick="toggleNone('wed')">
+          <span class="none-indicator"></span>
+          I am not available on Wednesday
+        </div>
+      </div>
+
+      <!-- Thursday -->
+      <div class="day-block">
+        <div class="day-header">
+          Thursday
+          <span class="day-date">April 23</span>
+        </div>
+        <div class="slots-grid" id="day-thu"></div>
+        <div class="select-all-row" onclick="toggleSelectAll('thu')">
+          <span class="select-all-toggle" id="sa-thu"></span>
+          Select all Thursday slots
+        </div>
+        <div class="none-row" id="none-thu" onclick="toggleNone('thu')">
+          <span class="none-indicator"></span>
+          I am not available on Thursday
+        </div>
+      </div>
+
+      <!-- Friday -->
+      <div class="day-block">
+        <div class="day-header">
+          Friday
+          <span class="day-date">April 24</span>
+        </div>
+        <div class="slots-grid" id="day-fri"></div>
+        <div class="select-all-row" onclick="toggleSelectAll('fri')">
+          <span class="select-all-toggle" id="sa-fri"></span>
+          Select all Friday slots
+        </div>
+        <div class="none-row" id="none-fri" onclick="toggleNone('fri')">
+          <span class="none-indicator"></span>
+          I am not available on Friday
+        </div>
+      </div>
+
+    </div><!-- /availability section -->
+
+    <div class="submit-area">
+      <div class="error-msg" id="submitError" style="margin-bottom:12px; display:none;">Please enter your name before submitting.</div>
+      <button type="submit" class="submit-btn" id="submitBtn">Submit Availability</button>
+    </div>
+
+  </form>
+
+  <div class="success" id="successBox">
+    <div class="success-icon">✓</div>
+    <h2>Response Received</h2>
+    <p>Thank you. Professor Donald will review all responses and send a confirmation with the session time and location.</p>
+  </div>
+
+  <div class="footer">University of Maryland Francis King Carey School of Law</div>
+
+</div><!-- /container -->
+
+<script>
+  // ── Time slot definitions ───────────────────────────────────────
+  const days = {
+    wed: {
+      slots: buildSlots(14, 18),  // 2pm–6pm (last slot starts at 5)
+    },
+    thu: {
+      slots: buildSlots(11, 17),  // 11am–5pm (last slot starts at 4)
+    },
+    fri: {
+      slots: buildSlots(10, 18),  // 10am–6pm (last slot starts at 5)
+    }
+  };
+
+  function buildSlots(startHour, endHour) {
+    const slots = [];
+    for (let h = startHour; h < endHour; h++) {
+      slots.push({
+        start: h,
+        end: h + 1,
+        label: formatHour(h),
+        endLabel: formatHour(h + 1),
+        id: `slot-${h}`
+      });
+    }
+    return slots;
+  }
+
+  function formatHour(h) {
+    const suffix = h >= 12 ? 'pm' : 'am';
+    const display = h > 12 ? h - 12 : h;
+    return `${display}:00 ${suffix}`;
+  }
+
+  // ── Render slots ────────────────────────────────────────────────
+  function renderSlots(dayKey, containerId) {
+    const container = document.getElementById(containerId);
+    days[dayKey].slots.forEach(slot => {
+      const div = document.createElement('div');
+      div.className = 'slot';
+      div.dataset.day = dayKey;
+      div.dataset.slot = slot.id;
+      div.innerHTML = `
+        <span class="slot-time">${slot.label}</span>
+        <span class="slot-end">– ${slot.endLabel}</span>
+        <span class="slot-check"></span>
+      `;
+      div.addEventListener('click', () => toggleSlot(div, dayKey));
+      container.appendChild(div);
+    });
+  }
+
+  renderSlots('wed', 'day-wed');
+  renderSlots('thu', 'day-thu');
+  renderSlots('fri', 'day-fri');
+
+  // ── Toggle individual slot ───────────────────────────────────────
+  function toggleSlot(el, dayKey) {
+    // If "none" is active, unset it first
+    const noneRow = document.getElementById(`none-${dayKey}`);
+    if (noneRow.classList.contains('none-selected')) {
+      noneRow.classList.remove('none-selected');
+    }
+    el.classList.toggle('selected');
+    updateSelectAll(dayKey);
+  }
+
+  // ── Select all ──────────────────────────────────────────────────
+  function toggleSelectAll(dayKey) {
+    const slots = document.querySelectorAll(`[data-day="${dayKey}"]`);
+    const allSelected = [...slots].every(s => s.classList.contains('selected'));
+    slots.forEach(s => {
+      if (allSelected) s.classList.remove('selected');
+      else s.classList.add('selected');
+    });
+    // Clear "none" if selecting
+    if (!allSelected) {
+      document.getElementById(`none-${dayKey}`).classList.remove('none-selected');
+    }
+    updateSelectAll(dayKey);
+  }
+
+  function updateSelectAll(dayKey) {
+    const slots = document.querySelectorAll(`[data-day="${dayKey}"]`);
+    const allSelected = slots.length > 0 && [...slots].every(s => s.classList.contains('selected'));
+    const saEl = document.getElementById(`sa-${dayKey}`);
+    saEl.classList.toggle('all-selected', allSelected);
+  }
+
+  // ── Toggle "none available" ──────────────────────────────────────
+  function toggleNone(dayKey) {
+    const noneRow = document.getElementById(`none-${dayKey}`);
+    const slots = document.querySelectorAll(`[data-day="${dayKey}"]`);
+    const isNone = noneRow.classList.contains('none-selected');
+    if (isNone) {
+      noneRow.classList.remove('none-selected');
+    } else {
+      // Deselect all slots
+      slots.forEach(s => s.classList.remove('selected'));
+      updateSelectAll(dayKey);
+      noneRow.classList.add('none-selected');
+    }
+  }
+
+  // ── Form submission ──────────────────────────────────────────────
+  document.getElementById('pollForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('studentName').value.trim();
+    if (!name) {
+      document.getElementById('submitError').style.display = 'block';
+      document.getElementById('submitError').textContent = 'Please enter your name before submitting.';
+      return;
+    }
+    document.getElementById('submitError').style.display = 'none';
+
+    // Collect selections
+    const availability = {};
+    ['wed', 'thu', 'fri'].forEach(dayKey => {
+      const noneSelected = document.getElementById(`none-${dayKey}`).classList.contains('none-selected');
+      if (noneSelected) {
+        availability[dayKey] = ['NOT AVAILABLE'];
+      } else {
+        const selected = [...document.querySelectorAll(`[data-day="${dayKey}"].selected`)]
+          .map(el => el.querySelector('.slot-time').textContent + ' – ' + el.querySelector('.slot-end').textContent);
+        availability[dayKey] = selected.length > 0 ? selected : ['(no selection)'];
+      }
+    });
+
+    // Build Formspree payload
+    const payload = {
+      name: name,
+      'Wednesday April 22': availability.wed.join(', '),
+      'Thursday April 23': availability.thu.join(', '),
+      'Friday April 24': availability.fri.join(', '),
+    };
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+
+    try {
+      const res = await fetch('https://formspree.io/f/xlgajjvz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        document.getElementById('pollForm').style.display = 'none';
+        document.getElementById('successBox').style.display = 'block';
+      } else {
+        throw new Error('Server error');
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Submit Availability';
+      document.getElementById('submitError').style.display = 'block';
+      document.getElementById('submitError').textContent =
+        'There was a problem submitting. Please try again or contact Professor Donald directly.';
+    }
+  });
+</script>
+
+</body>
+</html>
