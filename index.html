@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foundations in Business Law — Review Session Poll</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --dark: #1a1a2e;
+    --gold: #b8963e;
+    --gold-light: #d4af6a;
+    --red: #8b1a1a;
+    --border: #c8b99a;
+    --text: #2d2d2d;
+    --subtext: #5a5a5a;
+    --selected-bg: #e8f0e8;
+    --selected: #1a3a1a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--cream);
+    font-family: 'Source Sans 3', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+  .header {
+    background: var(--dark);
+    padding: 36px 24px 28px;
+    text-align: center;
+    border-bottom: 4px solid var(--gold);
+  }
+  .header-rule { width: 60px; height: 2px; background: var(--gold); margin: 0 auto 14px; }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 4vw, 2.1rem);
+    color: #fff;
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  .header .subtitle {
+    color: var(--gold-light);
+    font-size: 0.9rem;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .container { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+  .intro {
+    background: white;
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--gold);
+    padding: 22px 26px;
+    margin: 28px 0 0;
+    font-size: 0.96rem;
+    line-height: 1.7;
+    color: var(--subtext);
+  }
+  .intro strong { color: var(--text); }
+  .form-section { margin-top: 28px; }
+  .section-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--dark);
+    margin-bottom: 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-sublabel {
+    font-size: 0.82rem;
+    color: var(--subtext);
+    margin-bottom: 16px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .name-field {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 1rem;
+    border: 1.5px solid var(--border);
+    background: white;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+    margin-top: 4px;
+  }
+  .name-field:focus { border-color: var(--gold); }
+  .day-block {
+    background: white;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .day-header {
+    background: var(--dark);
+    color: white;
+    padding: 10px 18px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .day-date {
+    font-size: 0.78rem;
+    color: var(--gold-light);
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border-top: 1px solid var(--border);
+  }
+  .slot {
+    background: white;
+    padding: 14px 8px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .slot:hover { background: #f0ede5; }
+  .slot.selected { background: var(--selected-bg); }
+  .slot-time {
+    display: block;
+    font-size: 0.87rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text);
+  }
+  .slot.selected .slot-time { color: var(--selected); }
+  .slot-end {
+    display: block;
+    font-size: 0.74rem;
+    color: var(--subtext);
+    font-weight: 300;
+  }
+  .slot.selected .slot-end { color: var(--selected); opacity: 0.8; }
+  .slot-check {
+    display: block;
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    margin: 6px auto 0;
+    position: relative;
+    transition: all 0.15s;
+  }
+  .slot.selected .slot-check {
+    background: var(--selected);
+    border-color: var(--selected);
+  }
+  .slot.selected .slot-check::after {
+    content: '';
+    position: absolute;
+    left: 3px; top: 1px;
+    width: 5px; height: 8px;
+    border: 2px solid white;
+    border-top: none; border-left: none;
+    transform: rotate(45deg);
+  }
+  .day-footer {
+    border-top: 1px solid var(--border);
+    background: #faf8f3;
+  }
+  .select-all-row, .none-row {
+    padding: 9px 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    color: var(--subtext);
+    transition: color 0.15s;
+  }
+  .select-all-row { border-bottom: 1px solid var(--border); }
+  .select-all-row:hover { color: var(--gold); }
+  .none-row:hover { color: var(--red); }
+  .none-row.none-selected { color: var(--red); font-weight: 600; }
+  .toggle-box {
+    width: 14px; height: 14px;
+    border: 1px solid currentColor;
+    border-radius: 2px;
+    flex-shrink: 0;
+    position: relative;
+    display: inline-block;
+  }
+  .toggle-box.checked { background: var(--dark); border-color: var(--dark); }
+  .toggle-box.checked::after {
+    content: '';
+    position: absolute;
+    left: 2px; top: 0;
+    width: 4px; height: 8px;
+    border: 1.5px solid white;
+    border-top: none; border-left: none;
+    transform: rotate(45deg);
+  }
+  .submit-area { margin-top: 32px; text-align: center; }
+  .error-msg {
+    color: var(--red);
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    display: none;
+  }
+  .submit-btn {
+    background: var(--dark);
+    color: white;
+    border: none;
+    padding: 16px 48px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-bottom: 3px solid var(--gold);
+    transition: background 0.2s;
+  }
+  .submit-btn:hover { background: #2a2a4a; }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .success {
+    display: none;
+    background: white;
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--selected);
+    padding: 40px 28px;
+    text-align: center;
+    margin-top: 32px;
+  }
+  .success-icon { font-size: 2.5rem; margin-bottom: 12px; }
+  .success h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--dark);
+    margin-bottom: 10px;
+  }
+  .success p { color: var(--subtext); font-size: 0.95rem; line-height: 1.7; }
+  .footer { margin-top: 48px; text-align: center; font-size: 0.78rem; color: var(--border); }
+  @media (max-width: 480px) {
+    .slots-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-rule"></div>
+  <h1>Foundations in Business Law<br>Review Session — Availability Poll</h1>
+  <div class="subtitle">Spring 2026 &nbsp;·&nbsp; Professor Donald</div>
+</div>
+
+<div class="container">
+
+  <div class="intro">
+    Please indicate <strong>all time slots that work for you</strong> during the week of April 22–24. Select every block when you are free. Professor Donald will choose the time with the broadest availability and follow up with a confirmation.
+    <br><br>
+    <strong>Your responses are private</strong> and will not be visible to other students.
+  </div>
+
+  <form id="pollForm">
+
+    <div class="form-section">
+      <div class="section-label">Your Name</div>
+      <input type="text" class="name-field" id="studentName" placeholder="First Last" autocomplete="name">
+    </div>
+
+    <div class="form-section" style="margin-top:32px;">
+      <div class="section-label">Your Availability</div>
+      <div class="section-sublabel">Click each block you are free — select as many as apply</div>
+
+      <!-- WEDNESDAY -->
+      <div class="day-block">
+        <div class="day-header">Wednesday <span class="day-date">April 22</span></div>
+        <div class="slots-grid">
+          <div class="slot" data-day="wed" data-slot="wed-2"><span class="slot-time">2:00 pm</span><span class="slot-end">– 3:00 pm</span><span class="slot-check"></span></div>
+          <div class="slot" data-day="wed" data-slot="wed-3"><span class="slot-time">3:00 pm</span><span class="slot-end">– 4:00 pm</span><span class="slot-check"></span></div>
+          <div class="slot" data-day="wed" data-slot="wed-4"><span class="slot-time">4:00 pm</span><span class="slot-end">– 5:00 pm</span><span class="slot-check"></span></div>
+          <div class="slot" data-day="wed" data-slot="wed-5"><span class="slot-time">5:00 pm</span><span class="slot-end">– 6:00 pm</span><span class="slot-check"></span></div>
+        </div>
+        <div class="day-footer">
+          <div class="select-all-row" onclick="selectAll('wed')"><span class="toggle-box" id="sa-wed"></span> Select all Wednesday slots</div>
+          <div class="none-row" id="none-wed" onclick="toggleNone('wed')"><span class="toggle-box"></span> I am not available on Wednesday</div>
+        </div>
+      </div>
+
+      <!-- THURSDAY -->
+      <div class="day-block">
+        <div class="day-header">Thursday <span class="day-date">April 23</span></div>
+        <div class="slots-grid">
+          <div class="slot" data-day="thu" data-slot="thu-11"><span class="slot-time">11:00 am</span><span class="slot-end">– 12:00 pm</span><span class="slot-check"></span></div>
+          <div class="slot" data-day="thu" data-slot="thu-12"><span class="slot-time">12:00 pm</span><span class="slot-end">– 1:00 pm</span><span class="slot-check"></span></div>
+          <div class="slot" data-day="thu" data-slot="thu-1"><span class="slot-time">1:00 pm</span><span class="slot-end">– 2:00 pm</span><span class="slot-check"></span></div>
+          <div class="slot" data-day="thu" data-slot="thu-2"><span class="slot-time">2:00 pm</span><span class="slot-end">– 3:00 pm</span><span class="slot-check"></span></div>
+          <div class="slot" data-day="thu" data-slot="thu-3"><span class="slot-time">3:00 pm</span><span class="slot-end">– 4:00 pm</span><span class="slot-check"></span></div>
+          <div class="slot" data-day="thu" data-slot="thu-4"><span class="slot-time">4:00 pm</span><span class="slot-end">– 5:00 pm</span><span class="slot-check"></span></div>
+        </div>
+        <div class="day-footer">
+          <div class="select-all-row" onclick="selectAll('thu')"><span class="toggle-box" id="sa-thu"></span> Select all Thursday slots</div>
+          <div class="none-row" id="none-thu" onclick="toggleNone('thu')"><span class="toggle-box"></span> I am not available on Thursday</div>
+        </div>
+      </div>
+
+      <!-- FRIDAY -->
+      <div class="day-block">
+        <div class="day-header">Friday <span class="day-date">April 24</span></div>
+        <div class="slots-grid">
+          <div class="slot" data-day="fri" data-slot="fri-10"><span class="slot-time">10:00 am</span><span class="slot-end">– 11:00 am</span><span class="slot-check"></span></div>
+          <div class="slot" data-day="fri" data-slot="fri-11"><span class="slot-time">11:00 am</span><span class="slot-end">– 12:00 pm</span><span class="slot-check"></span></div>
+          <div class="slot" data-day="fri" data-slot="fri-12"><span class="slot-time">12:00 pm</span><span class="slot-end">– 1:00 pm</span><span class="slot-check"></span></div>
+          <div class="slot" data-day="fri" data-slot="fri-1"><span class="slot-time">1:00 pm</span><span class="slot-end">– 2:00 pm</span><span class="slot-check"></span></div>
+          <div class="slot" data-day="fri" data-slot="fri-2"><span class="slot-time">2:00 pm</span><span class="slot-end">– 3:00 pm</span><span class="slot-check"></span></div>
+          <div class="slot" data-day="fri" data-slot="fri-3"><span class="slot-time">3:00 pm</span><span class="slot-end">– 4:00 pm</span><span class="slot-check"></span></div>
+          <div class="slot" data-day="fri" data-slot="fri-4"><span class="slot-time">4:00 pm</span><span class="slot-end">– 5:00 pm</span><span class="slot-check"></span></div>
+          <div class="slot" data-day="fri" data-slot="fri-5"><span class="slot-time">5:00 pm</span><span class="slot-end">– 6:00 pm</span><span class="slot-check"></span></div>
+        </div>
+        <div class="day-footer">
+          <div class="select-all-row" onclick="selectAll('fri')"><span class="toggle-box" id="sa-fri"></span> Select all Friday slots</div>
+          <div class="none-row" id="none-fri" onclick="toggleNone('fri')"><span class="toggle-box"></span> I am not available on Friday</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="submit-area">
+      <div class="error-msg" id="submitError">Please enter your name before submitting.</div>
+      <button type="button" class="submit-btn" id="submitBtn" onclick="submitForm()">Submit Availability</button>
+    </div>
+
+  </form>
+
+  <div class="success" id="successBox">
+    <div class="success-icon">✓</div>
+    <h2>Response Received</h2>
+    <p>Thank you. Professor Donald will review all responses and send a confirmation with the session time and location.</p>
+  </div>
+
+  <div class="footer">University of Maryland Francis King Carey School of Law</div>
+
+</div>
+
+<script>
+  // Click individual slot
+  document.querySelectorAll('.slot').forEach(function(slot) {
+    slot.addEventListener('click', function() {
+      var day = this.getAttribute('data-day');
+      var noneRow = document.getElementById('none-' + day);
+      if (noneRow.classList.contains('none-selected')) {
+        noneRow.classList.remove('none-selected');
+      }
+      this.classList.toggle('selected');
+      updateSelectAll(day);
+    });
+  });
+
+  function selectAll(day) {
+    var slots = document.querySelectorAll('[data-day="' + day + '"]');
+    var allSelected = true;
+    slots.forEach(function(s) { if (!s.classList.contains('selected')) allSelected = false; });
+    slots.forEach(function(s) {
+      if (allSelected) s.classList.remove('selected');
+      else s.classList.add('selected');
+    });
+    if (!allSelected) {
+      document.getElementById('none-' + day).classList.remove('none-selected');
+    }
+    updateSelectAll(day);
+  }
+
+  function updateSelectAll(day) {
+    var slots = document.querySelectorAll('[data-day="' + day + '"]');
+    var allSelected = true;
+    slots.forEach(function(s) { if (!s.classList.contains('selected')) allSelected = false; });
+    var sa = document.getElementById('sa-' + day);
+    if (allSelected) sa.classList.add('checked');
+    else sa.classList.remove('checked');
+  }
+
+  function toggleNone(day) {
+    var noneRow = document.getElementById('none-' + day);
+    if (noneRow.classList.contains('none-selected')) {
+      noneRow.classList.remove('none-selected');
+    } else {
+      document.querySelectorAll('[data-day="' + day + '"]').forEach(function(s) {
+        s.classList.remove('selected');
+      });
+      updateSelectAll(day);
+      noneRow.classList.add('none-selected');
+    }
+  }
+
+  function submitForm() {
+    var name = document.getElementById('studentName').value.trim();
+    var errorEl = document.getElementById('submitError');
+    if (!name) {
+      errorEl.style.display = 'block';
+      return;
+    }
+    errorEl.style.display = 'none';
+
+    function getDay(day) {
+      if (document.getElementById('none-' + day).classList.contains('none-selected')) {
+        return 'Not available';
+      }
+      var selected = [];
+      document.querySelectorAll('[data-day="' + day + '"].selected').forEach(function(s) {
+        selected.push(s.querySelector('.slot-time').textContent + ' ' + s.querySelector('.slot-end').textContent);
+      });
+      return selected.length > 0 ? selected.join(', ') : 'No slots selected';
+    }
+
+    var payload = {
+      name: name,
+      'Wednesday April 22': getDay('wed'),
+      'Thursday April 23': getDay('thu'),
+      'Friday April 24': getDay('fri')
+    };
+
+    var btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+
+    fetch('https://formspree.io/f/xlgajjvz', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function(res) {
+      if (res.ok) {
+        document.getElementById('pollForm').style.display = 'none';
+        document.getElementById('successBox').style.display = 'block';
+      } else {
+        throw new Error('error');
+      }
+    }).catch(function() {
+      btn.disabled = false;
+      btn.textContent = 'Submit Availability';
+      errorEl.textContent = 'There was a problem submitting. Please try again.';
+      errorEl.style.display = 'block';
+    });
+  }
+</script>
+
+</body>
+</html>
